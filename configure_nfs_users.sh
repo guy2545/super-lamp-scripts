@@ -1,7 +1,5 @@
 #!/bin/bash
 
-NFS_SERVER="storagepool"
-
 # Check if the drive is already mounted
 if mountpoint -q /mnt/media; then
   echo "/mnt/media is already mounted."
@@ -9,20 +7,20 @@ else
   # Install nfs-common
   sudo apt-get update
   sudo apt-get install -y nfs-common
-  
-  #Let apt finish
+
+  # Let apt finish
   sleep 30
-  
+
   # Create media mount point
   sudo mkdir -p /mnt/media
   sudo chmod 755 /mnt/media
 
   # Add NFS entry to fstab
-  sudo sh -c "echo '${NFS_SERVER}:/mnt/blackhole/media /mnt/media nfs auto,nofail,noatime,nolock,intr,tcp,actimeo=1800 0 0' >> /etc/fstab"
+  sudo sh -c "echo 'storagepool:/mnt/blackhole/media /mnt/media nfs auto,nofail,noatime,nolock,intr,tcp,actimeo=1800 0 0' >> /etc/fstab"
 
   # Mount NFS share
   sudo mount -a
-fi
+fi 
 
 # Ensure media group exists
 if ! [[ $(getent group media) ]]; then
@@ -56,7 +54,7 @@ fi
 
 # Ensure plex user exists (optional, commented out)
 if ! [[ $(getent passwd plex) ]]; then
-   sudo useradd -m -G media -u 1001 plex
+  sudo useradd -m -G media -u 1001 plex
 fi
 
 # Ensure sabnzbd user exists
