@@ -15,25 +15,41 @@ sudo sh -c "echo 'storagepool:/mnt/blackhole/media /mnt/media nfs auto,nofail,no
 sudo mount -a
 
 # Ensure media group exists
-sudo groupadd -g 1001 media
+if ! [[ $(getent group media) ]]; then
+  sudo groupadd -g 1001 media
+fi
 
 # Ensure home_dirs group exists
-sudo groupadd -g 3000 home_dirs
+if ! [[ $(getent group home_dirs) ]]; then
+  sudo groupadd -g 3000 home_dirs
+fi
 
-# Ensure plex group exists
-sudo groupadd -g 4000 plex
+# Ensure plex group exists (optional, commented out)
+# if ! [[ $(getent group plex) ]]; then
+#   sudo groupadd -g 4000 plex
+# fi
 
 # Ensure stephen user exists
-sudo useradd -m -G home_dirs,media,plex -u 1000 stephen
+if ! [[ $(getent passwd stephen) ]]; then
+  sudo useradd -m -G home_dirs,media,plex -u 1000 stephen
+fi
 
 # Ensure radarr user exists
-sudo useradd -m -G media -u 1005 radarr
+if ! [[ $(getent passwd radarr) ]]; then
+  sudo useradd -m -G media -u 1005 radarr
+fi
 
 # Ensure sonarr user exists
-sudo useradd -m -G media -u 1004 sonarr
+if ! [[ $(getent passwd sonarr) ]]; then
+  sudo useradd -m -G media -u 1004 sonarr
+fi
 
-# Ensure plex user exists
-sudo useradd -m -G media -u 1001 plex
+# Ensure plex user exists (optional, commented out)
+if ! [[ $(getent passwd plex) ]]; then
+   sudo useradd -m -G media -u 1001 plex
+fi
 
 # Ensure sabnzbd user exists
-sudo useradd -m -G media -u 1003 sabnzbd
+if ! [[ $(getent passwd sabnzbd) ]]; then
+  sudo useradd -m -G media -u 1003 sabnzbd
+fi
