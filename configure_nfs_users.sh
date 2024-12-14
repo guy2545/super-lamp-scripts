@@ -1,18 +1,27 @@
 #!/bin/bash
 
-# Install nfs-common
-sudo apt-get update
-sudo apt-get install -y nfs-common
+NFS_SERVER="storagepool"
 
-# Create media mount point
-sudo mkdir -p /mnt/media
-sudo chmod 755 /mnt/media
+# Check if the drive is already mounted
+if mountpoint -q /mnt/media; then
+  echo "/mnt/media is already mounted."
+else
+  # Install nfs-common
+  sudo apt-get update
+  sudo apt-get install -y nfs-common
+  
+  #Let apt finish
+  sleep 30
+  
+  # Create media mount point
+  sudo mkdir -p /mnt/media
+  sudo chmod 755 /mnt/media
 
-# Add NFS entry to fstab
-sudo sh -c "echo 'storagepool:/mnt/blackhole/media /mnt/media nfs auto,nofail,noatime,nolock,intr,tcp,actimeo=1800 0 0' >> /etc/fstab"
+  # Add NFS entry to fstab
+  sudo sh -c "echo '${NFS_SERVER}:/mnt/blackhole/media /mnt/media nfs auto,nofail,noatime,nolock,intr,tcp,actimeo=1800 0 0' >> /etc/fstab"
 
-# Mount NFS share
-sudo mount -a
+  # Mount NFS share
+  sudo mount -a
 
 # Ensure media group exists
 if ! [[ $(getent group media) ]]; then
@@ -25,9 +34,9 @@ if ! [[ $(getent group home_dirs) ]]; then
 fi
 
 # Ensure plex group exists (optional, commented out)
-# if ! [[ $(getent group plex) ]]; then
-#   sudo groupadd -g 4000 plex
-# fi
+if ! [[ $(getent group plex) ]]; then
+  sudo groupadd -g 4000 plex
+fi
 
 # Ensure stephen user exists
 if ! [[ $(getent passwd stephen) ]]; then
