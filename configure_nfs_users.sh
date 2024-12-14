@@ -22,6 +22,7 @@ else
 
   # Mount NFS share
   sudo mount -a
+fi
 
 # Ensure media group exists
 if ! [[ $(getent group media) ]]; then
