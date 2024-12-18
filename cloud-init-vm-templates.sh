@@ -65,9 +65,9 @@ export storage=warpdrive
 ## Debian
 #Bookworm (12) (stable)
 wget "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2"
-create_template 900 "temp-debian-12" "debian-12-genericcloud-amd64.qcow2"
+create_template 900 "template-debian-12" "debian-12-genericcloud-amd64.qcow2"
 
 #24.04 (Noble Numbat) LTS
 wget "https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-amd64.img"
-create_template 800 "temp-ubuntu-24-04" "ubuntu-24.04-server-cloudimg-amd64.img"
+create_template 800 "template-ubuntu-24-04" "ubuntu-24.04-server-cloudimg-amd64.img"
 
