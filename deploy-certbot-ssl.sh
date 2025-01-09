@@ -18,6 +18,10 @@ fi
 install_dependencies() {
     echo "Installing dependencies..."
     apt update && apt install -y certbot python3-certbot python3-certbot-dns-standalone curl
+
+    echo "Installing and trusting root certificate..."
+    wget --no-check-certificate https://orangepi.guy2545.com/roots.pem -O /usr/local/share/ca-certificates/orangepi.crt
+    update-ca-certificates
 }
 
 # Obtain certificates
