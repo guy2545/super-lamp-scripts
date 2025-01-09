@@ -30,8 +30,7 @@ obtain_certificates() {
             $CERTBOT_BIN certonly \
                 --non-interactive \
                 --agree-tos \
-                --manual \
-                --preferred-challenges=dns \
+                --standalone \
                 --email "admin@cathairlabs.com" \
                 --server "$ACME_PROVIDER" \
                 -d "$FULL_DOMAIN"
