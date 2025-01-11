@@ -14,10 +14,16 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+# Check if PFX_PASSWORD is set
+if [[ -z "$PFX_PASSWORD" ]]; then
+    echo "Error: PFX_PASSWORD environment variable is not set."
+    exit 1
+fi
+
 # Install dependencies
 install_dependencies() {
     echo "Installing dependencies..."
-    apt update && apt install -y certbot python3-certbot python3-certbot-dns-standalone curl
+    apt update && apt install -y certbot python3-certbot python3-certbot-dns-standalone curl openssl
 
     echo "Installing and trusting root certificate..."
     wget --no-check-certificate https://orangepi.guy2545.com/roots.pem -O /usr/local/share/ca-certificates/orangepi.crt
@@ -48,7 +54,7 @@ obtain_certificates() {
     done
 }
 
-# Deploy certificates to /certs
+# Deploy certificates to /certs and generate PFX
 deploy_certificates() {
     echo "Deploying certificates to $CERTS_DIR..."
     mkdir -p "$CERTS_DIR"
@@ -63,6 +69,15 @@ deploy_certificates() {
                 cp "$DOMAIN_PATH/privkey.pem" "$CERTS_DIR/$FULL_DOMAIN-privkey.pem"
                 chmod 600 "$CERTS_DIR/$FULL_DOMAIN-privkey.pem"
                 echo "Certificates for $FULL_DOMAIN saved to $CERTS_DIR."
+
+                # Generate PFX file
+                echo "Generating PFX file for $FULL_DOMAIN..."
+                openssl pkcs12 -export \
+                    -out "$CERTS_DIR/$FULL_DOMAIN.pfx" \
+                    -inkey "$CERTS_DIR/$FULL_DOMAIN-privkey.pem" \
+                    -in "$CERTS_DIR/$FULL_DOMAIN-fullchain.pem" \
+                    -password pass:"$PFX_PASSWORD"
+                echo "PFX file generated for $FULL_DOMAIN."
             else
                 echo "Certificate path $DOMAIN_PATH does not exist."
             fi
