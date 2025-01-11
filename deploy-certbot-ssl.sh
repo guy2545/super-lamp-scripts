@@ -87,7 +87,7 @@ deploy_certificates() {
 
 # Main
 echo "Starting ACME certificate deployment..."
-#install_dependencies
+install_dependencies
 obtain_certificates
 deploy_certificates
 echo "Deployment complete."
