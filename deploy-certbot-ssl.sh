@@ -3,7 +3,7 @@
 # Variables
 ACME_PROVIDER="https://orangepi.guy2545.com/acme/acme/directory"
 HOSTNAMES=("$(hostname -s)") # Automatically set to the short hostname
-DOMAINS=("guy2545.com" "cathairlabs.com") # Add your domains here
+DOMAINS=("internal.cathairlabs.com") # Add your domains here
 CERTBOT_BIN="/usr/bin/certbot"
 CERT_PATH="/etc/letsencrypt/live"
 CERTS_DIR="/certs"
