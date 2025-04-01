@@ -18,7 +18,7 @@ screen -dmS $SESSION_NAME bash -c "
     echo 'Activating virtual environment...'
     source venv/bin/activate
     echo 'Starting RuinedFooocus...'
-    python launch.py --listen
+    python launch.py --listen --port 7861
 "
 
 echo "RuinedFooocus started in screen session: $SESSION_NAME"
